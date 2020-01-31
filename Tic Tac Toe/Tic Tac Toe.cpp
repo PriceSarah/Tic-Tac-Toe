@@ -26,11 +26,12 @@ const char* const BLANK = "\n\n\n"; //creates a large amount of space between li
 const char* map[3][3];
 
 
-bool gameOver;
+bool gameover = false;
 bool player1 = true;
 bool m_winVertical = false;
 bool m_winHorizontal = false;
 bool m_winDiagonal = false;
+bool m_tie = false;
 
 //Creates the map and its spaces
 void initializeMap()
@@ -184,15 +185,22 @@ bool tie()
 	if (m_winDiagonal == false && m_winHorizontal == false && m_winDiagonal == false && map[0][0] != EMPTY && map[1][0] != EMPTY && map[2][0] != EMPTY && map[0][1] != EMPTY && map[1][1] != EMPTY && map[2][1] != EMPTY && map[0][2] != EMPTY && map[1][2] != EMPTY && map[2][2] != EMPTY)
 	{
 		cout << WHITE << "No one wins, you both suck" << endl;
-		return true;
-		
-	}
-	else
-	{
-		return false;
+	
+		return m_tie = true;
 	}
 }
 
+bool gameOver()
+{
+	if (m_winDiagonal == true || m_winHorizontal == true || m_winVertical == true || m_tie == true)
+	{
+		cout << endl << INDENT << "Press 'Enter' to exit the program.";
+		cin.clear();
+		cin.ignore(cin.rdbuf()->in_avail());
+		cin.get(); 
+		return gameover== true;
+	}
+}
 //Gets the players command
 void getCommand()
 {
@@ -211,11 +219,14 @@ void getCommand()
 	cin.ignore(cin.rdbuf()->in_avail());
 	cin >> input;
 
+
 	//For if Player 1 is going
 	if (player1 == true)
 	{ 
 		while (input)
 		{
+			
+
 			if (strcmp(input, "00") == 0 && map[0][0] == EMPTY || strcmp(input, "0,0") == 0 && map[0][0] == EMPTY)
 			{
 				map[0][0] = PLAYER1;
@@ -260,9 +271,40 @@ void getCommand()
 			char next = cin.peek();
 			player1 = false;
 			
+			
+
+			if (winVertical() == true)
+			{
+				winVertical();
+				gameOver();
+				break;
+			}
+
+			if (m_winHorizontal == true)
+			{
+				winHorizontal();
+				gameOver();
+				break;
+			}
+
+			if (m_winDiagonal == true)
+			{
+				winDiagonal();
+				gameOver();
+				break;
+			}
+
+			if (m_tie == true)
+			{
+				tie();
+				gameOver();
+				break;
+			}
+
+
 			if (next == '\n' || next == EOF)
 				break;
-			
+
 			cin >> input;
 			std::cin.clear();
 			std::cin.ignore(std::cin.rdbuf()->in_avail());
@@ -317,6 +359,9 @@ void getCommand()
 			char next = cin.peek();
 			player1 = true;
 			
+
+
+
 			if (next == '\n' || next == EOF)
 				break;
 			
@@ -343,26 +388,30 @@ void Game()
 			cout << BLANK;
 
 		drawMap();
+
+		if (winVertical() == true)
+		{
+			gameOver();
+		}
+
+		if (winHorizontal() == true)
+		{
+			gameOver();
+		}
+
+		if (winDiagonal() == true)
+		{
+			gameOver();
+		}
+
+		if (tie() == true)
+		{
+			gameOver();
+		}
+
 		getCommand();
 
-		if (m_winVertical == true)
-		{
-			winVertical();
-		}
 		
-		if (m_winHorizontal == true)
-		{
-			winHorizontal();
-		}
-		
-		if (m_winDiagonal == true)
-		{
-			winDiagonal();
-		}
-		else
-		{
-			tie();
-		}
 		
 			
 		system("pause");
