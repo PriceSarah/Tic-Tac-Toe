@@ -1,6 +1,3 @@
-// Tic Tac Toe.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include "pch.h"
 #include <iostream>
 #include <cstring>
@@ -9,6 +6,7 @@
 
 using namespace std;
 
+//colors used
 const char* const RED = "\x1b[91m";
 const char* const BLUE = "\x1b[94m";
 const char* const WHITE = "\x1b[97m";
@@ -25,7 +23,7 @@ const char* const BLANK = "\n\n\n"; //creates a large amount of space between li
 
 const char* map[3][3];
 
-
+//different bools to determine 
 bool gameover = false;
 bool player1 = true;
 bool m_winVertical = false;
@@ -198,7 +196,8 @@ bool gameOver()
 		cin.clear();
 		cin.ignore(cin.rdbuf()->in_avail());
 		cin.get(); 
-		return gameover== true;
+		
+		return true;
 	}
 }
 //Gets the players command
